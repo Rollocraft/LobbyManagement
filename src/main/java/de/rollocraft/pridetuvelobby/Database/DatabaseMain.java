@@ -21,4 +21,13 @@ public class DatabaseMain {
     public Connection getConnection() {
         return connection;
     }
+
+    public boolean isConnected() {
+        try {
+            return connection != null && !connection.isClosed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
