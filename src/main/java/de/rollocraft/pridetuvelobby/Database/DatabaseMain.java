@@ -6,28 +6,29 @@ import java.sql.SQLException;
 
 public class DatabaseMain {
     private Connection connection;
-    private String databaseUrl = "";
-    private String user = "";
-    private String password = "";
+
+    public DatabaseMain() {
+        connectToDatabase();
+    }
 
     public void connectToDatabase() {
         try {
-            connection = DriverManager.getConnection(databaseUrl, user, password);
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/lol", "code", ")1Iaio0[Z0rozcbq");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     public Connection getConnection() {
         return connection;
     }
-
     public boolean isConnected() {
         try {
             return connection != null && !connection.isClosed();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 }

@@ -63,11 +63,67 @@ public class Time {
 
         return new Time(diffDays, diffHours, diffMinutes, diffSeconds);
     }
-
-
-    @Override
     public String toString() {
-        return String.format("%d Tage, %d Stunden, %d Minuten, %d Sekunden", days, hours, minutes, seconds);
+        if (days == 0 && hours == 0 ) {
+            return String.format(" %d m, %d sec", minutes, seconds);
+        }
+        if (days == 0) {
+            return String.format("%d h, %d m, %d sec", hours, minutes, seconds);
+        }
+        return String.format("%d d, %d h, %d m, %d sec", days, hours, minutes, seconds);
+    }
+
+    public Time add(Time other) {
+        int totalDays = this.days + other.days;
+        int totalHours = this.hours + other.hours;
+        int totalMinutes = this.minutes + other.minutes;
+        int totalSeconds = this.seconds + other.seconds;
+
+        if (totalSeconds >= 60) {
+            totalMinutes += totalSeconds / 60;
+            totalSeconds = totalSeconds % 60;
+        }
+
+        if (totalMinutes >= 60) {
+            totalHours += totalMinutes / 60;
+            totalMinutes = totalMinutes % 60;
+        }
+
+        if (totalHours >= 24) {
+            totalDays += totalHours / 24;
+            totalHours = totalHours % 24;
+        }
+
+        return new Time(totalDays, totalHours, totalMinutes, totalSeconds);
+    }
+
+    public Time subtract(Time other) {
+        int totalDays = this.days - other.days;
+        int totalHours = this.hours - other.hours;
+        int totalMinutes = this.minutes - other.minutes;
+        int totalSeconds = this.seconds - other.seconds;
+
+        if (totalSeconds < 0) {
+            totalMinutes--;
+            totalSeconds += 60;
+        }
+
+        if (totalMinutes < 0) {
+            totalHours--;
+            totalMinutes += 60;
+        }
+
+        if (totalHours < 0) {
+            totalDays--;
+            totalHours += 24;
+        }
+
+        // Wenn die Tage negativ sind, setzen wir sie auf 0
+        if (totalDays < 0) {
+            totalDays = 0;
+        }
+
+        return new Time(totalDays, totalHours, totalMinutes, totalSeconds);
     }
 }
 

@@ -1,6 +1,7 @@
 package de.rollocraft.pridetuvelobby.Database.Tables;
 
 import de.rollocraft.pridetuvelobby.Objects.Time;
+import org.bukkit.entity.Player;
 
 import java.sql.*;
 
@@ -72,6 +73,25 @@ public class TimerDatabaseManager {
                     insertStmt.setInt(5, time.getSeconds());
                     insertStmt.executeUpdate();
                 }
+            }
+        }
+    }
+    public Time getTime(Player player) throws SQLException {
+        String playerName = player.getName();
+        String query = "SELECT days, hours, minutes, seconds FROM timer WHERE player = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, playerName);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int days = rs.getInt("days");
+                int hours = rs.getInt("hours");
+                int minutes = rs.getInt("minutes");
+                int seconds = rs.getInt("seconds");
+
+                return new Time(days, hours, minutes, seconds);
+            } else {
+                return new Time(0, 0, 0, 0); // oder werfen Sie eine Ausnahme, wenn der Spieler nicht gefunden wurde
             }
         }
     }
