@@ -21,7 +21,10 @@ public class PlayerInteractListener implements Listener {
         ItemStack item = player.getInventory().getItemInMainHand();
 
         if (item.isSimilar(Items.ServerManagerItem())) {
-            inventoryManager.openInventory(player, inventoryManager.createInventory());
+            inventoryManager.openInventory(player, inventoryManager.createServerSelectorInventory());
+        }
+        if (item.isSimilar(Items.PlayerHeadItem(player))) {
+            inventoryManager.openInventory(player, inventoryManager.createStatsInventory(player));
         }
     }
 }

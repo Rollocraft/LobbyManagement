@@ -15,11 +15,12 @@ public class TimerDatabaseManager {
 
     public void createTimerTableIfNotExists() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute("CREATE TABLE IF NOT EXISTS timer (id INTEGER PRIMARY KEY, player VARCHAR(255) NOT NULL, days INTEGER NOT NULL, hours INTEGER NOT NULL, minutes INTEGER NOT NULL, seconds INTEGER NOT NULL)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS timer (id INTEGER PRIMARY KEY AUTO_INCREMENT, player VARCHAR(255) NOT NULL, days INTEGER NOT NULL, hours INTEGER NOT NULL, minutes INTEGER NOT NULL, seconds INTEGER NOT NULL)");
         }
     }
 
-    public void saveToDatabase(String playerName, Time time) throws SQLException {
+    public void saveToDatabase(Player player, Time time) throws SQLException {
+        String playerName = player.getName();
         // Zuerst die alten Werte des Spielers aus der Datenbank abrufen
         String query = "SELECT days, hours, minutes, seconds FROM timer WHERE player = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

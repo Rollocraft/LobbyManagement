@@ -20,6 +20,9 @@ public class PlayerJoinTimeMap {
         }
         return instance;
     }
+    public void removePlayer(Player player) {
+        playerTimes.remove(player);
+    }
 
     public Time getTimeForPlayer(Player player) {
         return playerTimes.get(player);

@@ -26,26 +26,30 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("threads")) {
-                boolean isTimerRunning = timer.isRunning();
-                boolean isUpdateRunning = update.isRunning();
-                Message.returnMessage(sender, "#####################");
-                Message.returnMessage(sender, "# Thread Timer: " + (isTimerRunning ? "an    #" : "aus  #"));
-                Message.returnMessage(sender, "# Thread Update: " + (isUpdateRunning ? "an  #" : "aus #"));
-                Message.returnMessage(sender, "#####################");
-            } else if (args[0].equalsIgnoreCase("database")) {
-                boolean isConnected = databaseMain.isConnected();
-                Message.returnMessage(sender, "Database: #### " + (isConnected ? "verbunden" : "nicht verbunden"));
-            } else if (args[0].equalsIgnoreCase("tps")) {
-                Message.returnMessage(sender, "Tps: !Todo!" );
-            } else if (args[0].equalsIgnoreCase("ram")) {
-                Message.returnMessage(sender, ": " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "MB / " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "MB");
-            } else {
-                Message.returnMessage(sender, "Unbekannter Befehl.");
+        if (sender != null && sender.hasPermission("pridetuve.status")) {
+            if (args.length > 0) {
+                if (args[0].equalsIgnoreCase("threads")) {
+                    boolean isTimerRunning = timer.isRunning();
+                    boolean isUpdateRunning = update.isRunning();
+                    Message.returnMessage(sender, "#####################");
+                    Message.returnMessage(sender, "# Thread Timer: " + (isTimerRunning ? "an      #" : "aus  #"));
+                    Message.returnMessage(sender, "# Thread Update: " + (isUpdateRunning ? "an    #" : "aus #"));
+                    Message.returnMessage(sender, "#####################");
+                } else if (args[0].equalsIgnoreCase("database")) {
+                    boolean isConnected = databaseMain.isConnected();
+                    Message.returnMessage(sender, "Database: #### " + (isConnected ? "verbunden" : "nicht verbunden"));
+                } else if (args[0].equalsIgnoreCase("tps")) {
+                    Message.returnMessage(sender, "Tps: !Todo!");
+                } else if (args[0].equalsIgnoreCase("ram")) {
+                    Message.returnMessage(sender, ": " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "MB / " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "MB");
+                } else {
+                    Message.returnMessage(sender, "Unbekannter Befehl.");
+                }
             }
+            return true;
         }
-        return true;
+        Message.returnMessage(sender, "Du hast keine Berechtigung!");
+        return false;
     }
 
     @Override

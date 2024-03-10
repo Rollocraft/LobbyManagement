@@ -8,31 +8,50 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
-public class TimeManager{
-    private  Timer timer;
-    private  Map<Player, Time> playerTimes = new HashMap<>();
-    private  TimerDatabaseManager timerDatabaseManager;
+public class TimeManager {
+    private Timer timer;
+    private TimerDatabaseManager timerDatabaseManager;
+
     public TimeManager(TimerDatabaseManager timerDatabaseManager, Timer timer) {
         this.timerDatabaseManager = timerDatabaseManager;
         this.timer = timer;
     }
+
     public Time getTime(Player player) {
         try {
-            PlayerJoinTimeMap sharedMap = PlayerJoinTimeMap.getInstance();
-
-            Time joinedTime = sharedMap.getTimeForPlayer(player);
+            PlayerJoinTimeMap playerJoinTimeMap = PlayerJoinTimeMap.getInstance();
+            Time playerTime = playerJoinTimeMap.getTimeForPlayer(player);
+            if (playerTime == null) {
+                playerTime = new Time(0, 0, 0, 0);
+            }
             Time oldtime = timerDatabaseManager.getTime(player);
             Time newtime = timer.getTime();
 
-            Time subtractedTime = newtime.subtract(joinedTime);
+            Time subtractedTime = newtime.subtract(playerTime);
             Time finalTime = subtractedTime.add(oldtime);
 
             return finalTime;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Time getNewTime(Player player) {
+        PlayerJoinTimeMap playerJoinTimeMap = PlayerJoinTimeMap.getInstance();
+        Time playerTime = playerJoinTimeMap.getTimeForPlayer(player);
+        if (playerTime == null) {
+            playerTime = new Time(0, 0, 0, 0);
+        }
+        Time newtime = timer.getTime();
+
+        Time finalTime = newtime.subtract(playerTime);
+
+        return finalTime;
+
+    }
+
+    public Time getCurrentTime() {
+        return timer.getTime();
     }
 }
