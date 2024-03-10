@@ -32,8 +32,8 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
                     boolean isTimerRunning = timer.isRunning();
                     boolean isUpdateRunning = update.isRunning();
                     Message.returnMessage(sender, "#####################");
-                    Message.returnMessage(sender, "# Thread Timer: " + (isTimerRunning ? "an      #" : "aus  #"));
-                    Message.returnMessage(sender, "# Thread Update: " + (isUpdateRunning ? "an    #" : "aus #"));
+                    Message.returnMessage(sender, "# Thread Timer: " + (isTimerRunning ? "an       #" : "aus  #"));
+                    Message.returnMessage(sender, "# Thread Update: " + (isUpdateRunning ? "an     #" : "aus #"));
                     Message.returnMessage(sender, "#####################");
                 } else if (args[0].equalsIgnoreCase("database")) {
                     boolean isConnected = databaseMain.isConnected();
@@ -49,7 +49,7 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         Message.returnMessage(sender, "Du hast keine Berechtigung!");
-        return false;
+        return true;
     }
 
     @Override

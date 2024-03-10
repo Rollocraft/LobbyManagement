@@ -38,7 +38,7 @@ public class ConnectToCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         Message.returnMessage(sender, "Du hast keine Berechtigung!");
-        return false;
+        return true;
     }
 
     @Override

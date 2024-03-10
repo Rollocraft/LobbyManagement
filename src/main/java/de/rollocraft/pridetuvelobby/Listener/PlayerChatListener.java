@@ -17,8 +17,6 @@ public class PlayerChatListener implements Listener {
         public void onPlayerChat (PlayerChatEvent event){
             Player player = event.getPlayer();
             xpManager.addXp(player, 5);
-            Bukkit.broadcastMessage("ChatEvent by " + player.getName());
-
 
     }
 }

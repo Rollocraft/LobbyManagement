@@ -11,6 +11,7 @@ import de.rollocraft.pridetuvelobby.Commands.ConnectToCommand;
 import de.rollocraft.pridetuvelobby.Commands.StatusCommand;
 import de.rollocraft.pridetuvelobby.Commands.HubCommand;
 import de.rollocraft.pridetuvelobby.Database.DatabaseMain;
+import de.rollocraft.pridetuvelobby.Database.Tables.PermissionDatabaseManager;
 import de.rollocraft.pridetuvelobby.Database.Tables.TimerDatabaseManager;
 import de.rollocraft.pridetuvelobby.Database.Tables.XpDatabaseManager;
 import de.rollocraft.pridetuvelobby.Listener.HubProtection.*;
@@ -21,7 +22,6 @@ import de.rollocraft.pridetuvelobby.Listener.PlayerQuitListener;
 import de.rollocraft.pridetuvelobby.Manager.*;
 import de.rollocraft.pridetuvelobby.Threads.Update;
 import de.rollocraft.pridetuvelobby.Threads.Timer;
-import de.rollocraft.pridetuvelobby.Utils.BungeeCord.Bungee;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +37,8 @@ public final class Main extends JavaPlugin {
     private InventoryManager inventoryManager;
     private XpDatabaseManager xpDatabaseManager;
     private XpManager xpManager;
+    private PermissionDatabaseManager permissionDatabaseManager;
+    private PermissionManager permissionManager;
 
     @Override
     public void onLoad() {
@@ -59,9 +61,11 @@ public final class Main extends JavaPlugin {
 
         timerDatabaseManager = new TimerDatabaseManager(databaseMain.getConnection());
         xpDatabaseManager = new XpDatabaseManager(databaseMain.getConnection());
+        permissionDatabaseManager = new PermissionDatabaseManager(databaseMain.getConnection());
         try {
             timerDatabaseManager.createTimerTableIfNotExists();
             xpDatabaseManager.createXpTableIfNotExists();
+            permissionDatabaseManager.createPermissionsTableIfNotExists();
         } catch (SQLException e) {
             Bukkit.getLogger().severe("Failed to connect to database! Is the database running?");
         }
@@ -72,12 +76,14 @@ public final class Main extends JavaPlugin {
 
         timeManager = new TimeManager(timerDatabaseManager, timer);
         xpManager = new XpManager(xpDatabaseManager);
-        scoreboardManager = new ScoreboardManager(timeManager, xpManager);
+        permissionManager = new PermissionManager(permissionDatabaseManager);
+        scoreboardManager = new ScoreboardManager(timeManager, xpManager, permissionManager);
 
-        tablistManager = new TablistManager();
+
+        tablistManager = new TablistManager(permissionManager);
         inventoryManager = new InventoryManager();
 
-        Update update = new Update(scoreboardManager);
+        Update update = new Update(scoreboardManager, tablistManager);
 
         timer.start();
         update.start();
@@ -87,7 +93,7 @@ public final class Main extends JavaPlugin {
         */
 
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(timerDatabaseManager, timeManager), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(tablistManager, scoreboardManager, timeManager, xpDatabaseManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(tablistManager, scoreboardManager, timeManager, xpDatabaseManager, permissionManager), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(inventoryManager), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(xpManager), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
@@ -112,6 +118,7 @@ public final class Main extends JavaPlugin {
 
         this.getCommand("sendTo").setExecutor(connectToCommand);
         this.getCommand("sendTo").setTabCompleter(connectToCommand);
+
 
         Bukkit.getLogger().info("PrideTuveLobby has been enabled!");
 
