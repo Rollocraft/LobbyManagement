@@ -12,15 +12,13 @@ import de.rollocraft.pridetuvelobby.Commands.StatusCommand;
 import de.rollocraft.pridetuvelobby.Commands.HubCommand;
 import de.rollocraft.pridetuvelobby.Database.DatabaseMain;
 import de.rollocraft.pridetuvelobby.Database.Tables.TimerDatabaseManager;
+import de.rollocraft.pridetuvelobby.Database.Tables.XpDatabaseManager;
 import de.rollocraft.pridetuvelobby.Listener.HubProtection.*;
 import de.rollocraft.pridetuvelobby.Listener.PlayerChatListener;
 import de.rollocraft.pridetuvelobby.Listener.PlayerInteractListener;
 import de.rollocraft.pridetuvelobby.Listener.PlayerJoinListener;
 import de.rollocraft.pridetuvelobby.Listener.PlayerQuitListener;
-import de.rollocraft.pridetuvelobby.Manager.InventoryManager;
-import de.rollocraft.pridetuvelobby.Manager.ScoreboardManager;
-import de.rollocraft.pridetuvelobby.Manager.TablistManager;
-import de.rollocraft.pridetuvelobby.Manager.TimeManager;
+import de.rollocraft.pridetuvelobby.Manager.*;
 import de.rollocraft.pridetuvelobby.Threads.Update;
 import de.rollocraft.pridetuvelobby.Threads.Timer;
 import de.rollocraft.pridetuvelobby.Utils.BungeeCord.Bungee;
@@ -36,8 +34,9 @@ public final class Main extends JavaPlugin {
     private ScoreboardManager scoreboardManager;
     private TimerDatabaseManager timerDatabaseManager;
     private TimeManager timeManager;
-    private Update update;
     private InventoryManager inventoryManager;
+    private XpDatabaseManager xpDatabaseManager;
+    private XpManager xpManager;
 
     @Override
     public void onLoad() {
@@ -50,36 +49,47 @@ public final class Main extends JavaPlugin {
 
         //Assingments
         Timer timer = new Timer();
+
         databaseMain = new DatabaseMain();
-        tablistManager = new TablistManager();
+
+
+        /*
+            Database Connection
+        */
 
         timerDatabaseManager = new TimerDatabaseManager(databaseMain.getConnection());
+        xpDatabaseManager = new XpDatabaseManager(databaseMain.getConnection());
         try {
             timerDatabaseManager.createTimerTableIfNotExists();
+            xpDatabaseManager.createXpTableIfNotExists();
         } catch (SQLException e) {
             Bukkit.getLogger().severe("Failed to connect to database! Is the database running?");
         }
 
+        /*
+            Managers
+        */
+
         timeManager = new TimeManager(timerDatabaseManager, timer);
+        xpManager = new XpManager(xpDatabaseManager);
+        scoreboardManager = new ScoreboardManager(timeManager, xpManager);
+
+        tablistManager = new TablistManager();
         inventoryManager = new InventoryManager();
-        scoreboardManager = new ScoreboardManager(timeManager);
-        update = new Update(scoreboardManager);
-        StatusCommand statusCommand = new StatusCommand(timer, databaseMain, update);
-        HubCommand hubcommand = new HubCommand();
-        ConnectToCommand connectToCommand = new ConnectToCommand();
+
+        Update update = new Update(scoreboardManager);
 
         timer.start();
         update.start();
-        try {
-            databaseMain.connectToDatabase();
-        } catch (Exception e) {
-            Bukkit.getLogger().severe("Failed to connect to database! Is the database running?");
-        }
+
+        /*
+            Registering Listeners
+        */
 
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(timerDatabaseManager, timeManager), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(tablistManager, scoreboardManager, timeManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(tablistManager, scoreboardManager, timeManager, xpDatabaseManager), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(inventoryManager), this);
-        getServer().getPluginManager().registerEvents(new PlayerChatListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerChatListener(xpManager), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new DamageListener(), this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
@@ -87,6 +97,13 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
 
+        /*
+            Registering Commands
+        */
+
+        StatusCommand statusCommand = new StatusCommand(timer, databaseMain, update);
+        HubCommand hubcommand = new HubCommand();
+        ConnectToCommand connectToCommand = new ConnectToCommand();
 
         this.getCommand("status").setExecutor(statusCommand);
         this.getCommand("status").setTabCompleter(statusCommand);
