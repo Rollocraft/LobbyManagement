@@ -5,7 +5,6 @@ import de.rollocraft.pridetuvelobby.Objects.Permission;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 public class PermissionManager {
@@ -15,12 +14,12 @@ public class PermissionManager {
         this.permissionDatabaseManager = permissionDatabaseManager;
     }
 
-    public List<String> getPermission(Player player) {
+    public Permission getPermission(Player player) {
         try {
             List<Permission> permissions = permissionDatabaseManager.loadPermissions();
             for (Permission permission : permissions) {
                 if (permission.getPlayers().contains(player.getName())) {
-                    return permission.getPermissions();
+                    return permission;
                 }
             }
         } catch (SQLException e) {
