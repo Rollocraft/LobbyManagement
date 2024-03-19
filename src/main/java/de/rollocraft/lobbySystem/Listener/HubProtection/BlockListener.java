@@ -10,14 +10,14 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
+        if (!event.getPlayer().hasPermission("lobbySystem.hubprotection.breakBlock")){
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
+        if (!event.getPlayer().hasPermission("lobbySystem.hubprotection.placeBlock")){
             event.setCancelled(true);
         }
     }

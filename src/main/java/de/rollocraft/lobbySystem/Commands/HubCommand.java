@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class HubCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender != null && sender.hasPermission("pridetuvelobby.hub")) {
+        if (sender != null && sender.hasPermission("lobbySystem.command.hub")) {
             if (args[0].equalsIgnoreCase("hub")) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;

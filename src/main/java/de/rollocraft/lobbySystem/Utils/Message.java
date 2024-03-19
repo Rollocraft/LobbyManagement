@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Message {
-    public static String PREFIX = "[PridetuveLobby] ";
+    public static String PREFIX = "[LobbySystem] ";
 
     public static void sendMessage(Player player, String message) {
         player.sendMessage(PREFIX + message);

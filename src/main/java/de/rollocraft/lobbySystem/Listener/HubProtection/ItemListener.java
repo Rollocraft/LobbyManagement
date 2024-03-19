@@ -11,14 +11,14 @@ public class ItemListener implements Listener {
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent event) {
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+        if (!event.getPlayer().hasPermission("lobbySystem.hubprotection.dropItem")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPickUp(PlayerPickupItemEvent event) {
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+        if (!event.getPlayer().hasPermission("lobbySystem.hubprotection.pickupItem")) {
             event.setCancelled(true);
         }
     }

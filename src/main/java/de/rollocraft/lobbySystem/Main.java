@@ -1,9 +1,7 @@
 package de.rollocraft.lobbySystem;
 
 /*
-    * PrideTuveLobby
     * Author: Rollocraft
-    * 09.03.2024
  */
 
 import de.rollocraft.lobbySystem.Commands.*;
@@ -19,6 +17,7 @@ import de.rollocraft.lobbySystem.Database.Sql.Tabels.MapSqlManager;
 import de.rollocraft.lobbySystem.Listener.GrapplingHookListener;
 import de.rollocraft.lobbySystem.Listener.*;
 import de.rollocraft.lobbySystem.Listener.HubProtection.*;
+import de.rollocraft.lobbySystem.Listener.HubProtection.PlayerInteractListener;
 import de.rollocraft.lobbySystem.Manager.*;
 import de.rollocraft.lobbySystem.Threads.Update;
 import de.rollocraft.lobbySystem.Threads.Timer;
@@ -61,7 +60,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Bukkit.getLogger().info("PrideTuveLobby is starting...");
+        Bukkit.getLogger().info("LobbySystem is starting...");
         instance = this;
         Bukkit.getLogger().info("Loading all Worlds! This may take a few seconds...");
         loadAllWorlds();
@@ -127,12 +126,12 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(timerDatabaseManager, timeManager, permissionManager), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(tablistManager, scoreboardManager, timeManager, xpDatabaseManager, worldManager), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(duelManager), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(inventoryManager), this);
+        getServer().getPluginManager().registerEvents(new de.rollocraft.lobbySystem.Listener.PlayerInteractListener(inventoryManager), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(xpManager,setupPvpMapManager,setupPvpKitManager), this);
         getServer().getPluginManager().registerEvents(new PlayerEntityInteractListener(inventoryManager), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new DamageListener(), this);
-        getServer().getPluginManager().registerEvents(new EntityListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
@@ -174,20 +173,18 @@ public final class Main extends JavaPlugin {
 
         this.getCommand("setup").setExecutor(setupCommand);
 
-        Bukkit.getLogger().info("Initializating Holograms");
-
-        Bukkit.getLogger().info("PrideTuveLobby has been enabled!");
+        Bukkit.getLogger().info("LobbySystem has been enabled!");
 
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getLogger().info("PrideTuveLobby is stopping...");
+        Bukkit.getLogger().info("LobbySystem is stopping...");
 
         databaseMain.disconnect();
         sqlMain.disconnect();
 
-        Bukkit.getLogger().info("PrideTuveLobby has been disabled!");
+        Bukkit.getLogger().info("LobbySystem has been disabled!");
     }
 
     public static Main getInstance() {

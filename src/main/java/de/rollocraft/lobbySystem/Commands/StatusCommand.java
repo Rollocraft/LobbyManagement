@@ -28,7 +28,7 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender != null && sender.hasPermission("pridetuvelobby.status")) {
+        if (sender != null && sender.hasPermission("lobbySystem.command.status")) {
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("threads")) {
                     boolean isTimerRunning = timer.isRunning();

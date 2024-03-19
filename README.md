@@ -71,30 +71,30 @@
 ## Permissions
 
 - <details> <summary>Events</summary>
-  - pridetuve.lobby.hubprotection*
-  - pridetuve.lobby.hubprotection.placeBlock
-  - pridetuve.lobby.hubprotection.breakBlock
-  - pridetuve.lobby.hubprotection.dropItem
-  - pridetuve.lobby.hubprotection.pickUpItem
-  - pridetuve.lobby.hubprotection.interact
+  - lobbySystem.hubprotection*
+  - lobbySystem.hubprotection.placeBlock
+  - lobbySystem.hubprotection.breakBlock
+  - lobbySystem.hubprotection.dropItem
+  - lobbySystem.hubprotection.pickUpItem
+  - lobbySystem.hubprotection.interact
 
 </details>
 
 - <details> <summary>Commands</summary>
-  - pridetuve.lobby.command*
-  - pridetuve.lobby.command.status
-  - pridetuve.lobby.command.hub
-  - pridetuve.lobby.command.invsee
-  - pridetuve.lobby.command.hologram
-  - pridetuve.lobby.command.blockparticle
-  - pridetuve.lobby.command.duel
-  - pridetuve.lobby.command.teleport
-  - pridetuve.lobby.command.world 
-  - pridetuve.lobby.command.setup
+  - lobbySystem.command*
+  - lobbySystem.command.status
+  - lobbySystem.command.hub
+  - lobbySystem.command.invsee
+  - lobbySystem.command.hologram
+  - lobbySystem.command.blockparticle
+  - lobbySystem.command.duel
+  - lobbySystem.command.teleport
+  - lobbySystem.command.world 
+  - lobbySystem.command.setup
 
 </details>
 
-> Last edit: 19.03.24 | 20:00
+> Last edit: 19.03.24 | 07:00
 > 
 > Version: 1.0.0
 > 
