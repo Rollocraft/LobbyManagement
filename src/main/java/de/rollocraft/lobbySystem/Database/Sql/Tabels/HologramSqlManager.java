@@ -30,7 +30,7 @@ public class HologramSqlManager {
     }
 
     public void addHologram(Location location, String text, String gruppe) {
-    String coords = location.getBlockX() + ";" + location.getBlockY() + ";" + location.getBlockZ() + ";" + location.getWorld().getName();
+    String coords = location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getWorld().getName();
     String sql = "INSERT INTO holograms(coords, text, gruppe) VALUES(?,?,?)";
 
     try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -44,7 +44,7 @@ public class HologramSqlManager {
 }
 
     public void deleteHologram(Location location) {
-        String coords = location.getBlockX() + ";" + location.getBlockY() + ";" + location.getBlockZ() + ";" + location.getWorld().getName();
+        String coords = location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getWorld().getName();
         String sql = "DELETE FROM holograms WHERE coords = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -56,7 +56,7 @@ public class HologramSqlManager {
     }
 
     public String getHologramText(Location location) {
-        String coords = location.getBlockX() + ";" + location.getBlockY() + ";" + location.getBlockZ() + ";" + location.getWorld().getName();
+        String coords = location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getWorld().getName();
         String sql = "SELECT text FROM holograms WHERE coords = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -100,7 +100,7 @@ public class HologramSqlManager {
 
             while (rs.next()) {
                 String[] coords = rs.getString("coords").split(";");
-                Location location = new Location(Bukkit.getWorld(coords[3]), Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
+                Location location = new Location(Bukkit.getWorld(coords[3]), Double.parseDouble(coords[0]), Double.parseDouble(coords[1]), Double.parseDouble(coords[2]));
                 locations.add(location);
             }
         } catch (SQLException e) {
@@ -111,7 +111,7 @@ public class HologramSqlManager {
     }
 
     public String getHologramGroup(Location location) {
-        String coords = location.getBlockX() + ";" + location.getBlockY() + ";" + location.getBlockZ() + ";" + location.getWorld().getName();
+        String coords = location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getWorld().getName();
         String sql = "SELECT gruppe FROM holograms WHERE coords = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

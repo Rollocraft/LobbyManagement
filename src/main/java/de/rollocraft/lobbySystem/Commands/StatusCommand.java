@@ -5,6 +5,7 @@ import de.rollocraft.lobbySystem.Database.Sql.SqlMain;
 import de.rollocraft.lobbySystem.Threads.Update;
 import de.rollocraft.lobbySystem.Threads.Timer;
 import de.rollocraft.lobbySystem.Utils.Message;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,19 +32,16 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
         if (sender != null && sender.hasPermission("lobbySystem.command.status")) {
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("threads")) {
-                    boolean isTimerRunning = timer.isRunning();
-                    boolean isUpdateRunning = update.isRunning();
+
                     Message.returnMessage(sender, "#####################");
-                    Message.returnMessage(sender, "# Thread Timer: " + (isTimerRunning ? "an       #" : "aus  #"));
-                    Message.returnMessage(sender, "# Thread Update: " + (isUpdateRunning ? "an     #" : "aus #"));
+                    Message.returnMessage(sender, "# Thread Timer: " + (isLastMessageOlderThanTwoSeconds(timer.getLastTime()) ? "an       #" : "aus  #"));
+                    Message.returnMessage(sender, "# Thread Update: " + (isLastMessageOlderThanTwoSeconds(update.getLastTime()) ? "an     #" : "aus #"));
                     Message.returnMessage(sender, "#####################");
                 } else if (args[0].equalsIgnoreCase("database")) {
                     boolean isMySqlConnected = databaseMain.isConnected();
                     boolean isSqlConnected = sqlMain.isConnected();
                     Message.returnMessage(sender, "Mysql: #### " + (isMySqlConnected ? "verbunden" : "nicht verbunden"));
                     Message.returnMessage(sender, "Sql: #### " + (isSqlConnected ? "verbunden" : "nicht verbunden"));
-                } else if (args[0].equalsIgnoreCase("tps")) {
-                    Message.returnMessage(sender, "Tps: !Todo!");
                 } else if (args[0].equalsIgnoreCase("ram")) {
                     Message.returnMessage(sender, ": " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "MB / " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "MB");
                 } else {
@@ -62,9 +60,12 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             completions.add("threads");
             completions.add("database");
-            completions.add("tps");
             completions.add("ram");
         }
         return completions;
+    }
+    private boolean isLastMessageOlderThanTwoSeconds(long getLastMessageTime) {
+        long timeSinceLastMessage = System.currentTimeMillis() - getLastMessageTime;
+        return timeSinceLastMessage > 2000; // 2 sec wegen irgendwelchen delays oder sonstigem
     }
 }

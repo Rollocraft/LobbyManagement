@@ -2,8 +2,9 @@ package de.rollocraft.lobbySystem.Threads;
 
 import de.rollocraft.lobbySystem.Objects.Time;
 
-public class Timer extends Thread{
+public class Timer extends Thread {
     private int time = 0;
+    private long lasttime = 0;
     private boolean running = true;
 
     @Override
@@ -14,18 +15,16 @@ public class Timer extends Thread{
                 time++; // Erhöhe die Variable um 1
             } catch (InterruptedException e) {
                 e.printStackTrace();
-
             }
+
+            lasttime = System.currentTimeMillis();
         }
     }
 
-    // Eigentlich unwichtig aber trotzdem mal da
     public void stopThread() {
         running = false;
     }
-    public boolean isRunning() {
-        return running;
-    }
+
     public synchronized Time getTime() {
         int totalSeconds = time;
         int days = totalSeconds / (24 * 60 * 60);
@@ -36,5 +35,13 @@ public class Timer extends Thread{
         int seconds = totalSeconds % 60;
         return new Time(days, hours, minutes, seconds);
     }
+
+    public long getLastTime() {
+        return lasttime;
+    }
+
 }
+
+
+
 

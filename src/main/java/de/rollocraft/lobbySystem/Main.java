@@ -11,6 +11,7 @@ import de.rollocraft.lobbySystem.Database.Mysql.Tables.PermissionDatabaseManager
 import de.rollocraft.lobbySystem.Database.Mysql.Tables.TimerDatabaseManager;
 import de.rollocraft.lobbySystem.Database.Mysql.Tables.XpDatabaseManager;
 import de.rollocraft.lobbySystem.Database.Sql.SqlMain;
+import de.rollocraft.lobbySystem.Database.Sql.Tabels.BlockParticelSqlManager;
 import de.rollocraft.lobbySystem.Database.Sql.Tabels.HologramSqlManager;
 import de.rollocraft.lobbySystem.Database.Sql.Tabels.KitSqlManager;
 import de.rollocraft.lobbySystem.Database.Sql.Tabels.MapSqlManager;
@@ -21,6 +22,7 @@ import de.rollocraft.lobbySystem.Listener.HubProtection.PlayerInteractListener;
 import de.rollocraft.lobbySystem.Manager.*;
 import de.rollocraft.lobbySystem.Threads.Update;
 import de.rollocraft.lobbySystem.Threads.Timer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -52,6 +54,8 @@ public final class Main extends JavaPlugin {
     private MapSqlManager mapSqlManager;
     private SetupPvpKitManager setupPvpKitManager;
     private KitSqlManager kitSqlManager;
+    private BlockParticleManager blockParticleManager;
+    private BlockParticelSqlManager blockParticelSqlManager;
 
     @Override
     public void onLoad() {
@@ -84,6 +88,8 @@ public final class Main extends JavaPlugin {
         mapSqlManager = new MapSqlManager(sqlMain.getConnection());
         hologramSqlManager = new HologramSqlManager(sqlMain.getConnection());
         kitSqlManager = new KitSqlManager(sqlMain.getConnection());
+        blockParticelSqlManager = new BlockParticelSqlManager(sqlMain.getConnection());
+
 
         try {
             timerDatabaseManager.createTimerTableIfNotExists();
@@ -93,6 +99,7 @@ public final class Main extends JavaPlugin {
             hologramSqlManager.createTableIfNotExist();
             mapSqlManager.createTableIfNotExist();
             kitSqlManager.createTableIfNotExist();
+            blockParticelSqlManager.createTableIfNotExist();
         } catch (SQLException e) {
             Bukkit.getLogger().severe("Failed to connect to database! Is the database running?");
         }
@@ -108,13 +115,14 @@ public final class Main extends JavaPlugin {
         worldManager = new WorldManager(mapSqlManager);
         setupPvpMapManager = new SetupPvpMapManager(mapSqlManager);
         setupPvpKitManager = new SetupPvpKitManager(kitSqlManager);
+        blockParticleManager = new BlockParticleManager(blockParticelSqlManager);
 
         tablistManager = new TablistManager(permissionManager);
         scoreboardManager = new ScoreboardManager(timeManager, xpManager, permissionManager);
         inventoryManager = new InventoryManager(timeManager,xpManager,permissionManager,mapSqlManager,kitSqlManager, worldManager);
         duelManager = new DuelManager(inventoryManager, mapSqlManager, kitSqlManager);
 
-        Update update = new Update(scoreboardManager, tablistManager);
+        Update update = new Update(scoreboardManager, tablistManager, xpManager,blockParticleManager);
 
         timer.start();
         update.start();
@@ -151,6 +159,7 @@ public final class Main extends JavaPlugin {
         TeleportCommand teleportCommand = new TeleportCommand(worldManager);
         WorldCommand worldCommand = new WorldCommand(worldManager);
         SetupCommand setupCommand = new SetupCommand(setupPvpMapManager, setupPvpKitManager);
+        BlockParticleCommand blockParticleCommand = new BlockParticleCommand(blockParticleManager);
 
         this.getCommand("status").setExecutor(statusCommand);
         this.getCommand("status").setTabCompleter(statusCommand);
@@ -172,6 +181,9 @@ public final class Main extends JavaPlugin {
         this.getCommand("world").setTabCompleter(worldCommand);
 
         this.getCommand("setup").setExecutor(setupCommand);
+
+        this.getCommand("blockparticle").setExecutor(blockParticleCommand);
+        this.getCommand("blockparticle").setTabCompleter(blockParticleCommand);
 
         Bukkit.getLogger().info("LobbySystem has been enabled!");
 

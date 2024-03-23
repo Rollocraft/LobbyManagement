@@ -33,32 +33,35 @@ public class HologramManager {
     }
 
     public int removeHologram(Location location) {
-        for (Entity entity : location.getWorld().getNearbyEntities(location, 2, 2, 2)) {
+        for (Entity entity : location.getWorld().getEntities()) {
             if (entity instanceof ArmorStand) {
                 ArmorStand armorStand = (ArmorStand) entity;
-                String text = armorStand.getCustomName();
-                String hologramText = hologramSqlManager.getHologramText(entity.getLocation());
-                if (hologramText != null && hologramText.equals(text)) {
-                    String groupname = hologramSqlManager.getHologramGroup(entity.getLocation());
-                    List<Location> groupLocations = hologramSqlManager.getHologramsInGroup(groupname);
-                    for (Location groupLocation : groupLocations) {
-                        Optional<Entity> removeEntityOptional = location.getWorld().getNearbyEntities(groupLocation, 1, 1, 1).stream()
-                                .filter(e -> e instanceof ArmorStand)
-                                .findFirst();
-                        if (removeEntityOptional.isPresent()) {
-                            Entity removeEntity = removeEntityOptional.get();
-                            removeEntity.remove();
-                            hologramSqlManager.deleteHologram(groupLocation);
-                        } else {
-                            Bukkit.getLogger().warning("Weird Error, entity should be found but wasn't");
-                            return 2; // Some error occurred
+                if (armorStand.getLocation().distanceSquared(location) <= 4) { // 2 block radius
+                    Bukkit.getLogger().info("ArmorStand found, visibility: " + armorStand.isVisible());
+                    String text = armorStand.getCustomName();
+                    String hologramText = hologramSqlManager.getHologramText(entity.getLocation());
+                    if (hologramText != null && hologramText.equals(text)) {
+                        String groupname = hologramSqlManager.getHologramGroup(entity.getLocation());
+                        List<Location> groupLocations = hologramSqlManager.getHologramsInGroup(groupname);
+                        for (Location groupLocation : groupLocations) {
+                            Optional<Entity> removeEntityOptional = location.getWorld().getNearbyEntities(groupLocation, 1, 1, 1).stream()
+                                    .filter(e -> e instanceof ArmorStand)
+                                    .findFirst();
+                            if (removeEntityOptional.isPresent()) {
+                                Entity removeEntity = removeEntityOptional.get();
+                                removeEntity.remove();
+                                hologramSqlManager.deleteHologram(groupLocation);
+                            } else {
+                                Bukkit.getLogger().warning("Weird Error, entity should be found but wasn't");
+                                return 2; // Some error occurred
+                            }
                         }
+                        return 0; // Success
                     }
-                    return 0; // Success
+                    return 1; // Hologram not found
                 }
                 return 1; // Hologram not found
             }
-            return 1; // Hologram not found
         }
         return 2; // Some error occurred
     }

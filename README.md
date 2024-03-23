@@ -30,8 +30,7 @@
 - hub
 - status (threads|database|tps|ram)
 - teleport (player, world)
-- hologram (create|remove|list)
-- <details> <summary>Mehr zum Hologram</summary>
+- <details> <summary>hologram (create|remove|list) || Mehr zum Hologram</summary>
   <details> <summary>"Commands"/Formatierung</summary>
 
   - `|` = neue Zeile (nicht vom text getrennt also z.b. "Hello|World")
@@ -61,16 +60,18 @@
   - Radius von der remove Funktion sind 2 blöcke
   - -> nah an das Hologramm gehen. Im falle das es nicht gefunden wird kann es immernoch mit folgendem Befehl entfernt werden:
   - `/kill @e[type=minecraft:armor_stand, limit=1, distance= ..2]`
-</details>
   </details>
+  </details>
+
 - blockparticle (create|remove|list)
 - duel (player)
-- world (create map|world **||** delete)
+- world (create map|world || delete)
 - setup (pvp kit|map)
 
 ## Permissions
 
-- <details> <summary>Events</summary>
+<details> <summary>Events</summary>
+  
   - lobbySystem.hubprotection*
   - lobbySystem.hubprotection.placeBlock
   - lobbySystem.hubprotection.breakBlock
@@ -80,7 +81,8 @@
 
 </details>
 
-- <details> <summary>Commands</summary>
+<details> <summary>Commands</summary>
+  
   - lobbySystem.command*
   - lobbySystem.command.status
   - lobbySystem.command.hub
@@ -91,11 +93,12 @@
   - lobbySystem.command.teleport
   - lobbySystem.command.world 
   - lobbySystem.command.setup
+  - lobbySystem.command.blockparticle
 
 </details>
 
-> Last edit: 19.03.24 | 07:00
+> Last edit: 21.03.24 | 08:40
 > 
-> Version: 1.0.0
+> Version: 1.0.1
 > 
 > Written by: Rollocraft
