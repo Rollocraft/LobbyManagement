@@ -1,29 +1,5 @@
 # Lobby System
 
-## Funktionen
-
-### Erstellung von Welten und Karten
-
-### Hologramme
-
-### Blockparticle
-
-### Duell-System
-
-### Spielzeit-System
-
-### Level-System
-
-### Custom Tabliste
-
-### Custom Scoreboard
-
-### Custom Join Items
-
-### Serverauswahl
-
-### Statistiken
-
 ## Befehle
 
 - invsee (player)
@@ -57,13 +33,24 @@
   </details>
   <details><summary>Infos</summary>
   
-  - Radius von der remove Funktion sind 2 blöcke
+  - Radius von der remove Funktion sind 4 blöcke
   - -> nah an das Hologramm gehen. Im falle das es nicht gefunden wird kann es immernoch mit folgendem Befehl entfernt werden:
   - `/kill @e[type=minecraft:armor_stand, limit=1, distance= ..2]`
   </details>
   </details>
 
-- blockparticle (create|remove|list)
+- <details> <summary>blockparticle (create|delte) || Mehr zum blockparticle</summary>
+    <details> <summary>Eigene Farbe</summary>
+  
+    Wenn als Typ `REDSTONE` Gewählt wird, kann eine eigene Farbe gewählt werden. Es kommt auch ein Tab Vorschlag mit Verfügbaren Farben
+    </details>
+    <details><summary>Infos</summary>
+    
+    - Radius von der remove Funktion sind 4 blöcke
+    - Intensity ist die Stärke der Partikels (Jeder Server hat ein Max dh nicht übertreiben!)
+    </details>
+
+</details>
 - duel (player)
 - world (create map|world || delete)
 - setup (pvp kit|map)
@@ -78,6 +65,7 @@
   - lobbySystem.hubprotection.dropItem
   - lobbySystem.hubprotection.pickUpItem
   - lobbySystem.hubprotection.interact
+  - lobbySystem.hubprotection.inventoryInteract
 
 </details>
 
@@ -85,7 +73,6 @@
   
   - lobbySystem.command*
   - lobbySystem.command.status
-  - lobbySystem.command.hub
   - lobbySystem.command.invsee
   - lobbySystem.command.hologram
   - lobbySystem.command.blockparticle

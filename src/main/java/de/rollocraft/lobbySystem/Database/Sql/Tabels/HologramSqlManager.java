@@ -20,6 +20,7 @@ public class HologramSqlManager {
                 + "	coords text NOT NULL,"
                 + "	text text NOT NULL,"
                 + "	gruppe text NOT NULL"
+                + "name text NULL,"
                 + ");";
 
         try (Statement stmt = conn.createStatement()) {

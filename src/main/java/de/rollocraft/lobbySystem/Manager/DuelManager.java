@@ -6,6 +6,7 @@ import de.rollocraft.lobbySystem.Objects.Duel;
 import de.rollocraft.lobbySystem.Utils.Base64Util;
 import de.rollocraft.lobbySystem.Utils.Maps.PlayerDuelMap;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -31,13 +32,12 @@ public class DuelManager {
 
     public void acceptDuel(Player player, Player target) {
         duel = new Duel(player, target, null, null);
-        Bukkit.getLogger().info("Duel started");
         inventoryManager.openInventory(player, InventoryManager.InventoryType.KIT_SELECTOR);
     }
 
     public void declineDuel(Player player, Player target) {
-        player.sendMessage("Your Duel to " + target.getName() + "got declined!");
-        target.sendMessage("You declined the Duel");
+        player.sendMessage(ChatColor.RED + "Your Duel to " + target.getName() + " got declined!");
+        target.sendMessage(ChatColor.RED + "You declined the Duel");
     }
 
     public void setMap(String map) {
@@ -74,6 +74,7 @@ public class DuelManager {
         String map = duel.getMap();
 
         String world = mapSqlManager.getWorldName(map);
+
         Location spawnplayer = mapSqlManager.getSpawnLocation1(map, world);
         Location spawntarget = mapSqlManager.getSpawnLocation2(map, world);
 

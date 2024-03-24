@@ -42,9 +42,7 @@ public class BlockParticleManager {
         List<Effects> allEffects = blockParticelSqlManager.getAllEffects();
         for (Effects effect : allEffects) {
             double distanceSquared = effect.getLocation().distanceSquared(location);
-            Bukkit.getLogger().info("Checking particle at " + effect.getLocation() + ", distance squared: " + distanceSquared);
             if (distanceSquared <= 4) {
-                Bukkit.getLogger().info("Deleted particle at " + effect.getLocation());
                 blockParticelSqlManager.deleteEffect(effect.getLocation());
             }
         }

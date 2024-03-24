@@ -1,0 +1,7 @@
+#Config
+
+#Datenabank
+database:
+  host: ""
+  user: ""
+  password: ""

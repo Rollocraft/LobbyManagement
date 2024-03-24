@@ -3,7 +3,9 @@ package de.rollocraft.lobbySystem.Manager;
 import de.rollocraft.lobbySystem.Database.Sql.Tabels.HologramSqlManager;
 import de.rollocraft.lobbySystem.Objects.Hologram;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 
@@ -25,7 +27,10 @@ public class HologramManager {
         } while (hologramSqlManager.groupExists(groupname));
 
         for (String line : lines) {
-            Hologram hologram = new Hologram(line);
+            //Wenn die Zeile direkt übernommen wird (mit farbcode ist sie ncihtmehr die gleiche wei ldas scorebaord den coede in eine farbe überstzt!
+            String coloredLine = ChatColor.translateAlternateColorCodes('&', line);
+
+            Hologram hologram = new Hologram(coloredLine);
             hologram.setupArmorStand(location);
             hologramSqlManager.addHologram(location, line, groupname);
             location.subtract(0, 0.25, 0);
@@ -36,7 +41,7 @@ public class HologramManager {
         for (Entity entity : location.getWorld().getEntities()) {
             if (entity instanceof ArmorStand) {
                 ArmorStand armorStand = (ArmorStand) entity;
-                if (armorStand.getLocation().distanceSquared(location) <= 4) { // 2 block radius
+                if (armorStand.getLocation().distanceSquared(location) < 4) { // 2 block radius
                     Bukkit.getLogger().info("ArmorStand found, visibility: " + armorStand.isVisible());
                     String text = armorStand.getCustomName();
                     String hologramText = hologramSqlManager.getHologramText(entity.getLocation());
@@ -50,6 +55,7 @@ public class HologramManager {
                             if (removeEntityOptional.isPresent()) {
                                 Entity removeEntity = removeEntityOptional.get();
                                 removeEntity.remove();
+                                Bukkit.getWorld(location.getWorld().getName()).save();
                                 hologramSqlManager.deleteHologram(groupLocation);
                             } else {
                                 Bukkit.getLogger().warning("Weird Error, entity should be found but wasn't");

@@ -2,6 +2,7 @@ package de.rollocraft.lobbySystem.Commands;
 
 import de.rollocraft.lobbySystem.Database.Mysql.DatabaseMain;
 import de.rollocraft.lobbySystem.Database.Sql.SqlMain;
+import de.rollocraft.lobbySystem.Main;
 import de.rollocraft.lobbySystem.Threads.Update;
 import de.rollocraft.lobbySystem.Threads.Timer;
 import de.rollocraft.lobbySystem.Utils.Message;
@@ -43,7 +44,9 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
                     Message.returnMessage(sender, "Mysql: #### " + (isMySqlConnected ? "verbunden" : "nicht verbunden"));
                     Message.returnMessage(sender, "Sql: #### " + (isSqlConnected ? "verbunden" : "nicht verbunden"));
                 } else if (args[0].equalsIgnoreCase("ram")) {
-                    Message.returnMessage(sender, ": " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "MB / " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "MB");
+                    Message.returnMessage(sender, "Ram: " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "MB / " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "MB");
+                } else if (args[0].equalsIgnoreCase("tps")) {
+                    Message.returnMessage(sender, "Tps: " + Main.getInstance().getServer().getTPS());
                 } else {
                     Message.returnMessage(sender, "Unbekannter Befehl.");
                 }

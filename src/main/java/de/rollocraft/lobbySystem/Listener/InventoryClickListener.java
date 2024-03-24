@@ -52,7 +52,7 @@ public class InventoryClickListener implements Listener {
             }
         }
 
-        if (!player.getGameMode().equals(GameMode.CREATIVE)) {
+        if (!player.hasPermission("lobbySystem.hubprotection.inventoryInteract")) {
             event.setCancelled(true);
         }
     }

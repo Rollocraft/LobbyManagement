@@ -1,6 +1,7 @@
 package de.rollocraft.lobbySystem.Commands;
 
 import de.rollocraft.lobbySystem.Utils.Message;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +14,7 @@ public class HubCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("hub")) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    //CHnage to velocity
+                    player.teleport(Bukkit.getWorld("world").getSpawnLocation());
                 } else {
                     Message.returnMessage(sender, "Du bist kein Spieler!");
                 }

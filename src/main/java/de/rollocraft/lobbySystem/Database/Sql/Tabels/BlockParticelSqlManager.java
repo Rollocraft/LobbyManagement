@@ -21,6 +21,7 @@ public class BlockParticelSqlManager {
                 + "	color text,"
                 + "	type text NOT NULL,"
                 + "intensity integer NOT NULL"
+                + "name text NULL,"
                 + ");";
 
         try (Statement stmt = conn.createStatement()) {

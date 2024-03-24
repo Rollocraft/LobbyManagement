@@ -3,6 +3,7 @@ package de.rollocraft.lobbySystem.Commands;
 
 import de.rollocraft.lobbySystem.Manager.SetupPvpKitManager;
 import de.rollocraft.lobbySystem.Manager.SetupPvpMapManager;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,8 +32,24 @@ public class SetupCommand implements CommandExecutor, TabCompleter {
 
         Player player = (Player) sender;
 
-        if (args.length < 2 || !args[0].equalsIgnoreCase("pvp") ||
-                (!args[1].equalsIgnoreCase("kit") && !args[1].equalsIgnoreCase("map"))) {
+        //Npc
+
+        if (args.length == 1 && args[0].equalsIgnoreCase("npc")) {
+            player.sendMessage("Please specify a sub-command: npc create/remove");
+            return true;
+        }
+
+        if (args[1].equalsIgnoreCase("create")) {
+            //npcManager.createNpc(player.getLocation());
+            player.sendMessage(ChatColor.GREEN + "NPC erstellt.");
+        } else if (args[1].equalsIgnoreCase("remove")) {
+            //npcManager.removeNpc(player.getLocation());
+            player.sendMessage(ChatColor.RED + "NPC entfernt.");
+        }
+
+        //PVP
+
+        if (args.length == 1 && args[0].equalsIgnoreCase("pvp")) {
             player.sendMessage("Please specify a sub-command: pvp kit/map");
             return true;
         }
@@ -49,9 +66,11 @@ public class SetupCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("pvp");
+            return Arrays.asList("pvp", "npc");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("pvp")) {
             return Arrays.asList("kit", "map");
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("npc")) {
+            return Arrays.asList("create", "remove");
         }
 
         return Collections.emptyList();

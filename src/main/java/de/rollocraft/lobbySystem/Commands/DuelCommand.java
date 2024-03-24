@@ -35,6 +35,11 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
         }
         Player player = (Player) sender;
 
+        if (args.length == 0) {
+            player.sendMessage("Usage: /duel <player>");
+            return true;
+        }
+
         Player target = Bukkit.getPlayer(args[0]);
         //Fall des Servers aufrufs
         if (args.length == 3) {
@@ -43,10 +48,7 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
         }
 
         //Überprüfen ob der Spieler einen Spieler angegeben hat
-        if (args.length == 0) {
-            player.sendMessage("Usage: /duel <player>");
-            return true;
-        }
+
         if (target == null) {
             player.sendMessage("Player not found");
             return true;

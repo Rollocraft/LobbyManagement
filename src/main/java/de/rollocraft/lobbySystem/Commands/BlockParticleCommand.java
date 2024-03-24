@@ -49,7 +49,6 @@ public class BlockParticleCommand implements CommandExecutor, TabCompleter {
                     blockParticleManager.createBlockParticle(effect);
                     sender.sendMessage(ChatColor.GREEN + "Created particle at your location!");
                 } else if (args[0].equalsIgnoreCase("delete")) {
-                    Bukkit.getLogger().info("Calling deleteBlockParticle"); // Added log output
                     blockParticleManager.deleteBlockParticle(location);
                     sender.sendMessage(ChatColor.BLUE + "Deleted all particles in a 2 block radius!");
                 }
@@ -68,7 +67,7 @@ public class BlockParticleCommand implements CommandExecutor, TabCompleter {
             return getAllOptions();
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
-            return getAllParticleNames();
+            return getAllParticleNames(args[1]);
         }
         if (args.length == 3 && args[0].equalsIgnoreCase("create")) {
             return intensity();
@@ -85,10 +84,13 @@ public class BlockParticleCommand implements CommandExecutor, TabCompleter {
         return intensity;
     }
 
-    private List<String> getAllParticleNames() {
+    private List<String> getAllParticleNames(String input) {
         List<String> particleNames = new ArrayList<>();
         for (Particle particle : Particle.values()) {
-            particleNames.add(particle.name());
+            String particleName = particle.name();
+            if (!particleName.startsWith("LEGACY") && !particleName.startsWith("BLOCK") && particleName.startsWith(input.toUpperCase())) { // Maybe so updaten das zumindes BLOCK auch genutzt werden kann?
+                particleNames.add(particleName);
+            }
         }
         return particleNames;
     }

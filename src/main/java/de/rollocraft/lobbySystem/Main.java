@@ -23,6 +23,7 @@ import de.rollocraft.lobbySystem.Manager.*;
 import de.rollocraft.lobbySystem.Threads.Update;
 import de.rollocraft.lobbySystem.Threads.Timer;
 
+import de.rollocraft.lobbySystem.Utils.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -56,6 +57,7 @@ public final class Main extends JavaPlugin {
     private KitSqlManager kitSqlManager;
     private BlockParticleManager blockParticleManager;
     private BlockParticelSqlManager blockParticelSqlManager;
+    private ConfigManager configManager;
 
     @Override
     public void onLoad() {
@@ -66,6 +68,10 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         Bukkit.getLogger().info("LobbySystem is starting...");
         instance = this;
+
+        configManager = new ConfigManager(this);
+        configManager.setup();
+
         Bukkit.getLogger().info("Loading all Worlds! This may take a few seconds...");
         loadAllWorlds();
         Bukkit.getLogger().info("All Worlds loaded!, Hard work done :)!");
@@ -73,7 +79,7 @@ public final class Main extends JavaPlugin {
         //Assingments
         Timer timer = new Timer();
 
-        databaseMain = new DatabaseMain();
+        databaseMain = new DatabaseMain(configManager);
         sqlMain = new SqlMain(this);
 
 
@@ -143,8 +149,9 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
-        getServer().getPluginManager().registerEvents(new EntityDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new GrapplingHookListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
 
 
         /*
@@ -164,8 +171,6 @@ public final class Main extends JavaPlugin {
         this.getCommand("status").setExecutor(statusCommand);
         this.getCommand("status").setTabCompleter(statusCommand);
 
-        this.getCommand("hub").setExecutor(hubcommand);
-
         this.getCommand("invsee").setExecutor(invseeCommand);
 
         this.getCommand("hologram").setExecutor(hologramCommand);
@@ -184,6 +189,8 @@ public final class Main extends JavaPlugin {
 
         this.getCommand("blockparticle").setExecutor(blockParticleCommand);
         this.getCommand("blockparticle").setTabCompleter(blockParticleCommand);
+
+
 
         Bukkit.getLogger().info("LobbySystem has been enabled!");
 
@@ -221,5 +228,7 @@ public final class Main extends JavaPlugin {
             }
         }
     }
-
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
 }
