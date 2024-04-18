@@ -1,7 +1,35 @@
 #Config
 
+#JoinMessage
+Join:
+  joinMessage:
+    enabled: true
+    message: ""
+  joinTitle:
+    enabled: true
+    title: ""
+    subtitle: ""
+
 #Datenabank
 database:
   host: ""
   user: ""
   password: ""
+
+#Scoreboard
+scoreboard:
+  title: ""
+  domain: ""
+
+#Kann erweitert werden
+#SocialCommand bitte immer am anfang subcommand und dann die url
+#z.b. tiktok: "https://www.tiktok.com/@username"
+socialcommand:
+  tiktok: ""
+  youtube: ""
+
+#Commandpannel
+commandpannel:
+  examplepannel: #subcommand name also Z.b. /commandpanel examplepannel
+    filler: "" #Z.b. filler: "Material.DIAMOND_BLOCK"
+    slot: "", "", "" #Z.b. slot: "1", "item", "command"

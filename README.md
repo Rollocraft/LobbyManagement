@@ -7,6 +7,7 @@
 - status (threads|database|tps|ram)
 - teleport (player, world)
 - <details> <summary>hologram (create|remove|list) || Mehr zum Hologram</summary>
+
   <details> <summary>"Commands"/Formatierung</summary>
 
   - `|` = neue Zeile (nicht vom text getrennt also z.b. "Hello|World")
@@ -40,6 +41,7 @@
   </details>
 
 - <details> <summary>blockparticle (create|delte) || Mehr zum blockparticle</summary>
+  
     <details> <summary>Eigene Farbe</summary>
   
     Wenn als Typ `REDSTONE` Gewählt wird, kann eine eigene Farbe gewählt werden. Es kommt auch ein Tab Vorschlag mit Verfügbaren Farben
@@ -81,11 +83,18 @@
   - lobbySystem.command.world 
   - lobbySystem.command.setup
   - lobbySystem.command.blockparticle
+  - lobbySystem.command.gamemode.creative
+  - lobbySystem.command.gamemode.survival
+  - lobbySystem.command.gamemode.adventure
+  - lobbySystem.command.gamemode.spectator
+  - lobbySystem.command.fly
+  - lobbySystem.command.vanish
+  - lobbySystem.command.build
 
 </details>
 
-> Last edit: 21.03.24 | 08:40
+> Last edit: 24.03.24 | 12:27
 > 
-> Version: 1.0.1
+> Version: 0.9
 > 
 > Written by: Rollocraft

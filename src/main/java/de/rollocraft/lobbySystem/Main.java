@@ -4,26 +4,24 @@ package de.rollocraft.lobbySystem;
     * Author: Rollocraft
  */
 
-import de.rollocraft.lobbySystem.Commands.*;
-import de.rollocraft.lobbySystem.Commands.DuelCommand;
-import de.rollocraft.lobbySystem.Database.Mysql.DatabaseMain;
-import de.rollocraft.lobbySystem.Database.Mysql.Tables.PermissionDatabaseManager;
-import de.rollocraft.lobbySystem.Database.Mysql.Tables.TimerDatabaseManager;
-import de.rollocraft.lobbySystem.Database.Mysql.Tables.XpDatabaseManager;
-import de.rollocraft.lobbySystem.Database.Sql.SqlMain;
-import de.rollocraft.lobbySystem.Database.Sql.Tabels.BlockParticelSqlManager;
-import de.rollocraft.lobbySystem.Database.Sql.Tabels.HologramSqlManager;
-import de.rollocraft.lobbySystem.Database.Sql.Tabels.KitSqlManager;
-import de.rollocraft.lobbySystem.Database.Sql.Tabels.MapSqlManager;
-import de.rollocraft.lobbySystem.Listener.GrapplingHookListener;
-import de.rollocraft.lobbySystem.Listener.*;
-import de.rollocraft.lobbySystem.Listener.HubProtection.*;
-import de.rollocraft.lobbySystem.Listener.HubProtection.PlayerInteractListener;
-import de.rollocraft.lobbySystem.Manager.*;
-import de.rollocraft.lobbySystem.Threads.Update;
-import de.rollocraft.lobbySystem.Threads.Timer;
+import de.rollocraft.lobbySystem.Minecraft.Commands.*;
+import de.rollocraft.lobbySystem.Minecraft.Commands.DuelCommand;
+import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.DatabaseMain;
+import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.Tables.PermissionDatabaseManager;
+import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.Tables.TimerDatabaseManager;
+import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.Tables.XpDatabaseManager;
+import de.rollocraft.lobbySystem.Minecraft.Database.Sql.SqlMain;
+import de.rollocraft.lobbySystem.Minecraft.Database.Sql.Tabels.*;
+import de.rollocraft.lobbySystem.Minecraft.Listener.*;
+import de.rollocraft.lobbySystem.Minecraft.Listener.HubProtection.*;
+import de.rollocraft.lobbySystem.Minecraft.Manager.*;
+import de.rollocraft.lobbySystem.Minecraft.Manager.Setup.SetupParkourManager;
+import de.rollocraft.lobbySystem.Minecraft.Manager.Setup.SetupPvpKitManager;
+import de.rollocraft.lobbySystem.Minecraft.Manager.Setup.SetupPvpMapManager;
+import de.rollocraft.lobbySystem.Minecraft.Threads.Update;
+import de.rollocraft.lobbySystem.Minecraft.Threads.Timer;
+import de.rollocraft.lobbySystem.Minecraft.Utils.ConfigManager;
 
-import de.rollocraft.lobbySystem.Utils.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -58,6 +56,9 @@ public final class Main extends JavaPlugin {
     private BlockParticleManager blockParticleManager;
     private BlockParticelSqlManager blockParticelSqlManager;
     private ConfigManager configManager;
+    private SetupParkourManager setupParkourManager;
+    private ParkourManager parkourManager;
+    private ParkourSqlManager parkourSqlManager;
 
     @Override
     public void onLoad() {
@@ -95,6 +96,7 @@ public final class Main extends JavaPlugin {
         hologramSqlManager = new HologramSqlManager(sqlMain.getConnection());
         kitSqlManager = new KitSqlManager(sqlMain.getConnection());
         blockParticelSqlManager = new BlockParticelSqlManager(sqlMain.getConnection());
+        parkourSqlManager = new ParkourSqlManager(sqlMain.getConnection());
 
 
         try {
@@ -102,10 +104,12 @@ public final class Main extends JavaPlugin {
             xpDatabaseManager.createXpTableIfNotExists();
             permissionDatabaseManager.createPermissionsTableIfNotExists();
 
+
             hologramSqlManager.createTableIfNotExist();
             mapSqlManager.createTableIfNotExist();
             kitSqlManager.createTableIfNotExist();
             blockParticelSqlManager.createTableIfNotExist();
+            parkourSqlManager.createTableIfNotExists();
         } catch (SQLException e) {
             Bukkit.getLogger().severe("Failed to connect to database! Is the database running?");
         }
@@ -122,11 +126,13 @@ public final class Main extends JavaPlugin {
         setupPvpMapManager = new SetupPvpMapManager(mapSqlManager);
         setupPvpKitManager = new SetupPvpKitManager(kitSqlManager);
         blockParticleManager = new BlockParticleManager(blockParticelSqlManager);
+        parkourManager = new ParkourManager(parkourSqlManager);
 
         tablistManager = new TablistManager(permissionManager);
-        scoreboardManager = new ScoreboardManager(timeManager, xpManager, permissionManager);
+        scoreboardManager = new ScoreboardManager(timeManager, xpManager, permissionManager, configManager);
         inventoryManager = new InventoryManager(timeManager,xpManager,permissionManager,mapSqlManager,kitSqlManager, worldManager);
         duelManager = new DuelManager(inventoryManager, mapSqlManager, kitSqlManager);
+        setupParkourManager = new SetupParkourManager(parkourManager);
 
         Update update = new Update(scoreboardManager, tablistManager, xpManager,blockParticleManager);
 
@@ -140,18 +146,19 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(timerDatabaseManager, timeManager, permissionManager), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(tablistManager, scoreboardManager, timeManager, xpDatabaseManager, worldManager), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(duelManager), this);
-        getServer().getPluginManager().registerEvents(new de.rollocraft.lobbySystem.Listener.PlayerInteractListener(inventoryManager), this);
-        getServer().getPluginManager().registerEvents(new PlayerChatListener(xpManager,setupPvpMapManager,setupPvpKitManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(inventoryManager, parkourManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerChatListener(xpManager,setupPvpMapManager,setupPvpKitManager, setupParkourManager), this);
         getServer().getPluginManager().registerEvents(new PlayerEntityInteractListener(inventoryManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(inventoryManager, parkourManager), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new DamageListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new GrapplingHookListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
 
         /*
@@ -159,14 +166,21 @@ public final class Main extends JavaPlugin {
         */
 
         StatusCommand statusCommand = new StatusCommand(timer, databaseMain, update, sqlMain);
-        HubCommand hubcommand = new HubCommand();
+        //HubCommand hubcommand = new HubCommand();
         InvseeCommand invseeCommand = new InvseeCommand();
         HologramCommand hologramCommand = new HologramCommand(hologramManager);
         DuelCommand duelCommand = new DuelCommand(duelManager);
         TeleportCommand teleportCommand = new TeleportCommand(worldManager);
         WorldCommand worldCommand = new WorldCommand(worldManager);
-        SetupCommand setupCommand = new SetupCommand(setupPvpMapManager, setupPvpKitManager);
+        SetupCommand setupCommand = new SetupCommand(setupPvpMapManager, setupPvpKitManager,setupParkourManager);
         BlockParticleCommand blockParticleCommand = new BlockParticleCommand(blockParticleManager);
+        SocialCommand socialCommand = new SocialCommand(configManager);
+        GamemodeCommand gamemodeCommand = new GamemodeCommand();
+        FlyCommand flyCommand = new FlyCommand();
+        VanishCommand vanishCommand = new VanishCommand();
+        HeadCommand headCommand = new HeadCommand();
+        BuildCommand buildCommand = new BuildCommand();
+        ParkourCommand parkourCommand = new ParkourCommand(parkourManager);
 
         this.getCommand("status").setExecutor(statusCommand);
         this.getCommand("status").setTabCompleter(statusCommand);
@@ -189,6 +203,20 @@ public final class Main extends JavaPlugin {
 
         this.getCommand("blockparticle").setExecutor(blockParticleCommand);
         this.getCommand("blockparticle").setTabCompleter(blockParticleCommand);
+
+        this.getCommand("social").setExecutor(socialCommand);
+
+        this.getCommand("gamemode").setExecutor(gamemodeCommand);
+
+        this.getCommand("fly").setExecutor(flyCommand);
+
+        this.getCommand("vanish").setExecutor(vanishCommand);
+
+        this.getCommand("head").setExecutor(headCommand);
+
+        this.getCommand("build").setExecutor(buildCommand);
+
+        this.getCommand("parkour").setExecutor(parkourCommand);
 
 
 
