@@ -162,7 +162,6 @@ public final class Main extends JavaPlugin {
         */
 
         StatusCommand statusCommand = new StatusCommand(timer, databaseMain, update, sqlMain);
-        //HubCommand hubcommand = new HubCommand();
         InvseeCommand invseeCommand = new InvseeCommand();
         HologramCommand hologramCommand = new HologramCommand(hologramManager);
         DuelCommand duelCommand = new DuelCommand(duelManager);
