@@ -7,7 +7,6 @@ package de.rollocraft.lobbySystem;
 import de.rollocraft.lobbySystem.Minecraft.Commands.*;
 import de.rollocraft.lobbySystem.Minecraft.Commands.DuelCommand;
 import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.DatabaseMain;
-import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.Tables.PermissionDatabaseManager;
 import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.Tables.TimerDatabaseManager;
 import de.rollocraft.lobbySystem.Minecraft.Database.Mysql.Tables.XpDatabaseManager;
 import de.rollocraft.lobbySystem.Minecraft.Database.Sql.SqlMain;
@@ -42,7 +41,6 @@ public final class Main extends JavaPlugin {
     private InventoryManager inventoryManager;
     private XpDatabaseManager xpDatabaseManager;
     private XpManager xpManager;
-    private PermissionDatabaseManager permissionDatabaseManager;
     private PermissionManager permissionManager;
     private HologramManager hologramManager;
     private SqlMain sqlMain;
@@ -90,7 +88,6 @@ public final class Main extends JavaPlugin {
 
         timerDatabaseManager = new TimerDatabaseManager(databaseMain.getConnection());
         xpDatabaseManager = new XpDatabaseManager(databaseMain.getConnection());
-        permissionDatabaseManager = new PermissionDatabaseManager(databaseMain.getConnection());
 
         mapSqlManager = new MapSqlManager(sqlMain.getConnection());
         hologramSqlManager = new HologramSqlManager(sqlMain.getConnection());
@@ -102,7 +99,6 @@ public final class Main extends JavaPlugin {
         try {
             timerDatabaseManager.createTimerTableIfNotExists();
             xpDatabaseManager.createXpTableIfNotExists();
-            permissionDatabaseManager.createPermissionsTableIfNotExists();
 
 
             hologramSqlManager.createTableIfNotExist();
