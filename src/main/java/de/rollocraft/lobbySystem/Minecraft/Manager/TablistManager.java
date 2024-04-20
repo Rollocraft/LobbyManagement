@@ -36,12 +36,6 @@ public class TablistManager {
         team.addEntry(player.getName());
         team.setPrefix("[" + prefix + "] ");
 
-
-        String header = "Das ist ein Testserver" + "\n" + " " + "\n" + "lol" + "\n" + "" + "\n";
-        String footer = " " + "\n" + "Ein toller text" + "\n" + " " + "\n" + ChatColor.BLUE +"-------------------------------";
-
-        player.setPlayerListHeader(header);
-        player.setPlayerListFooter(footer);
     }
 }
 }
