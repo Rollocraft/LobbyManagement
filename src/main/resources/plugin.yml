@@ -1,0 +1,21 @@
+name: LobbySystem
+version: '${version}'
+main: de.rollocraft.lobbysystemMain
+api-version: '1.20'
+authors: [Rollocraft]
+commands:
+    status:
+    invsee:
+    hologram:
+    duel:
+    teleport:
+    world:
+    setup:
+    blockparticle:
+    social:
+    gamemode:
+    fly:
+    vanish:
+    head:
+    build:
+    parkour:
