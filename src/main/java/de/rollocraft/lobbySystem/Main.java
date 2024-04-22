@@ -176,6 +176,7 @@ public final class Main extends JavaPlugin {
         HeadCommand headCommand = new HeadCommand();
         BuildCommand buildCommand = new BuildCommand();
         ParkourCommand parkourCommand = new ParkourCommand(parkourManager);
+        CreatorSettingsCommand creatorSettingsCommand = new CreatorSettingsCommand();
 
         this.getCommand("status").setExecutor(statusCommand);
         this.getCommand("status").setTabCompleter(statusCommand);
@@ -212,6 +213,8 @@ public final class Main extends JavaPlugin {
         this.getCommand("build").setExecutor(buildCommand);
 
         this.getCommand("parkour").setExecutor(parkourCommand);
+
+        this.getCommand("creatorsettings").setExecutor(creatorSettingsCommand);
 
 
 
