@@ -4,8 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -19,16 +19,16 @@ public enum CreatorSettings {
                 Component.text("[ON]", NamedTextColor.DARK_GRAY),
                 Component.text("")),
         RECMODE(
-                Component.text("[REC MODE]", NamedTextColor.GOLD),
-                Component.text("[REC MODE]", NamedTextColor.DARK_GRAY),
+                Component.text(" [REC MODE]", TextColor.color(255,165,0)),
+                Component.text(" [REC MODE]", NamedTextColor.DARK_GRAY),
                 Component.text("")),
         FRIENDSONLY(
-                Component.text("[FRIENDS ONLY]", NamedTextColor.GOLD),
-                Component.text("[FRIENDS ONLY]", NamedTextColor.DARK_GRAY),
+                Component.text(" [FRIENDS ONLY]", TextColor.color(255,165,0)),
+                Component.text(" [FRIENDS ONLY]", NamedTextColor.DARK_GRAY),
                 Component.text("")),
         OFF(
-                Component.text("[OFF]", NamedTextColor.DARK_RED),
-                Component.text("[OFF]", NamedTextColor.DARK_GRAY),
+                Component.text(" [OFF]", NamedTextColor.RED),
+                Component.text(" [OFF]", NamedTextColor.DARK_GRAY),
                 Component.text(""));
 
         private Component nameactive;
@@ -52,15 +52,15 @@ public enum CreatorSettings {
     }
     public enum Settings {
         RECORDINGMODE(
-                "Recording Mode",
+                "\n\nRecording Mode",
                 Component.empty(),
                 List.of(State.ON, State.OFF)),
         ALLOWMSG(
-                "Allow /msg",
+                "\n\nAllow /msg",
                 Component.empty(),
                 List.of(State.ON, State.RECMODE, State.FRIENDSONLY,State.OFF)),
         SHOWJOINMESSAGE(
-                "Show Join Message",
+                "\n\nShow Join Message",
                 Component.empty(),
                 List.of(State.ON, State.RECMODE, State.FRIENDSONLY,State.OFF));
 
@@ -76,7 +76,7 @@ public enum CreatorSettings {
         public String getName() {
             return this.name;
         }
-        public @NotNull Component getTooltip() {
+        public Component getTooltip() {
             return this.tooltip;
         }
         public List<State> getStates() {

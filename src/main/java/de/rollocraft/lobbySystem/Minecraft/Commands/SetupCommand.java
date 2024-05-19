@@ -4,6 +4,8 @@ package de.rollocraft.lobbySystem.Minecraft.Commands;
 import de.rollocraft.lobbySystem.Minecraft.Manager.Setup.SetupParkourManager;
 import de.rollocraft.lobbySystem.Minecraft.Manager.Setup.SetupPvpKitManager;
 import de.rollocraft.lobbySystem.Minecraft.Manager.Setup.SetupPvpMapManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.translation.Translatable;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,6 +32,10 @@ public class SetupCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
+            return true;
+        }
+        if (args.length == 0) {
+            sender.sendMessage("Please specify a sub-command: npc/pvp/parkour");
             return true;
         }
 

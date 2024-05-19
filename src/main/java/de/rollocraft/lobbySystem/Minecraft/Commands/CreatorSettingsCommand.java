@@ -11,14 +11,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static de.rollocraft.lobbySystem.Minecraft.Utils.BookCreator.generateBook2;
+import static de.rollocraft.lobbySystem.Minecraft.Utils.BookCreator.generateBook;
 
 public class CreatorSettingsCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (!(sender instanceof Player p)) return false;
-        p.openBook(generateBook2(CreatorSettings.Pages.p1));
+        p.openBook(generateBook(CreatorSettings.Pages.p1));
         return true;
     }
 

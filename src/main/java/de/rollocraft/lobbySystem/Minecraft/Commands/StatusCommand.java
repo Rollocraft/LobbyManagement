@@ -50,7 +50,9 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
                 } else {
                     Message.returnMessage(sender, "Unbekannter Befehl.");
                 }
+                return true;
             }
+            Message.returnMessage(sender, "Unbekannter Befehl.");
             return true;
         }
         Message.returnMessage(sender, "Du hast keine Berechtigung!");
@@ -64,11 +66,14 @@ public class StatusCommand implements CommandExecutor, TabCompleter {
             completions.add("threads");
             completions.add("database");
             completions.add("ram");
+            completions.add("tps");
         }
         return completions;
     }
+
     private boolean isLastMessageOlderThanTwoSeconds(long getLastMessageTime) {
         long timeSinceLastMessage = System.currentTimeMillis() - getLastMessageTime;
         return timeSinceLastMessage > 2000; // 2 sec wegen irgendwelchen delays oder sonstigem
     }
+
 }

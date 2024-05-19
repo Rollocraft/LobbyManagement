@@ -1,5 +1,8 @@
 #Config
 
+#Debug
+debug: false
+
 #JoinMessage
 Join:
   joinMessage:

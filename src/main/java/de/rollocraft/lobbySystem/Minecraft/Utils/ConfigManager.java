@@ -1,6 +1,5 @@
 package de.rollocraft.lobbySystem.Minecraft.Utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,5 +35,10 @@ public class ConfigManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void reload() {
+        save();
+        setup();
     }
 }

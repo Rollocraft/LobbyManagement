@@ -21,6 +21,7 @@ import de.rollocraft.lobbySystem.Minecraft.Threads.Update;
 import de.rollocraft.lobbySystem.Minecraft.Threads.Timer;
 import de.rollocraft.lobbySystem.Minecraft.Utils.ConfigManager;
 
+import de.rollocraft.lobbySystem.Minecraft.Utils.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -57,6 +58,7 @@ public final class Main extends JavaPlugin {
     private SetupParkourManager setupParkourManager;
     private ParkourManager parkourManager;
     private ParkourSqlManager parkourSqlManager;
+    private static Debugger debugger;
 
     @Override
     public void onLoad() {
@@ -71,6 +73,7 @@ public final class Main extends JavaPlugin {
         configManager = new ConfigManager(this);
         configManager.setup();
 
+        debugger = new Debugger(this);
         Bukkit.getLogger().info("Loading all Worlds! This may take a few seconds...");
         loadAllWorlds();
         Bukkit.getLogger().info("All Worlds loaded!, Hard work done :)!");
@@ -177,6 +180,7 @@ public final class Main extends JavaPlugin {
         BuildCommand buildCommand = new BuildCommand();
         ParkourCommand parkourCommand = new ParkourCommand(parkourManager);
         CreatorSettingsCommand creatorSettingsCommand = new CreatorSettingsCommand();
+        LobbySystemCommand lobbySystemCommand = new LobbySystemCommand();
 
         this.getCommand("status").setExecutor(statusCommand);
         this.getCommand("status").setTabCompleter(statusCommand);
@@ -216,6 +220,9 @@ public final class Main extends JavaPlugin {
 
         this.getCommand("creatorsettings").setExecutor(creatorSettingsCommand);
 
+        this.getCommand("lobbysystem").setExecutor(lobbySystemCommand);
+        this.getCommand("lobbysystem").setTabCompleter(lobbySystemCommand);
+
 
 
         Bukkit.getLogger().info("LobbySystem has been enabled!");
@@ -235,6 +242,7 @@ public final class Main extends JavaPlugin {
     public static Main getInstance() {
         return instance;
     }
+
     private void loadAllWorlds() {
         File serverDirectory = this.getServer().getWorldContainer();
         File[] worldDirectories = serverDirectory.listFiles(File::isDirectory);
@@ -256,5 +264,8 @@ public final class Main extends JavaPlugin {
     }
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+    public static Debugger getDebugger() {
+        return debugger;
     }
 }

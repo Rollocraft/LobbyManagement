@@ -1,6 +1,6 @@
 name: LobbySystem
 version: '${version}'
-main: de.rollocraft.lobbysystemMain
+main: de.rollocraft.lobbySystem.Main
 api-version: '1.20'
 authors: [Rollocraft]
 commands:
@@ -20,3 +20,4 @@ commands:
     build:
     parkour:
     creatorsettings:
+    lobbysystem:
