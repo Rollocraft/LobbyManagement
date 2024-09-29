@@ -1,4 +1,6 @@
-# Lobby System
+# Lobby Managemet
+
+LobbyManagement-Plugin ist <b>das</b> Plugin, um deinen Minecraft-Server aufzuwerten! Mit den Möglichkeiten, die es bietet, kannst du deinen Minecraft-Server auf das nächste Level bringen. Es bietet eine große Auswahl an Funktionen, Minispielen und vielem mehr.
 
 ## Befehle
 
@@ -53,13 +55,14 @@
     </details>
 
 </details>
+
 - duel (player)
 - world (create map|world || delete)
 - setup (pvp kit|map)
 
 ## Permissions
 
-<details> <summary>Events</summary>
+<details> <summary> Protection </summary>
   
   - lobbySystem.hubprotection*
   - lobbySystem.hubprotection.placeBlock
@@ -71,7 +74,7 @@
 
 </details>
 
-<details> <summary>Commands</summary>
+<details> <summary> Commands </summary>
   
   - lobbySystem.command*
   - lobbySystem.command.status
@@ -93,8 +96,8 @@
 
 </details>
 
-> Last edit: 24.03.24 | 12:27
+> Last edit: 29.09.24 | 12:27
 > 
-> Version: 0.9
+> Version: 0.91
 > 
 > Written by: Rollocraft
